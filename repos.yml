@@ -1,0 +1,8 @@
+default:
+  # GitHub Organisations of interest
+  orgs:
+    - ansible
+  repos:
+    - ansible/ansible
+  collections:
+    - awx.awx
