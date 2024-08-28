@@ -1,6 +1,7 @@
 default:
-  # GitHub Organisations of interest
+  repos_to_index: 100
   orgs:
+    # GitHub Organisations of interest
     - ansible
   repos:
     - ansible/ansible

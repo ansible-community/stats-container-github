@@ -2,7 +2,7 @@
 source('functions.R')
 source('/srv/docker-config/github/github.token')
 org_repo_cfg <- config::get(file = '/srv/docker-config/github/repos.yml')
-board <- pins::board_folder('/srv/docker-pins/github')
+board <- pins::board_folder('/srv/docker-pins/github/meta')
 
 org_repos <-
   tibble::enframe(org_repo_cfg$orgs,name=NULL,value='org') |>
@@ -27,4 +27,4 @@ repos |>
   dplyr::mutate(repo = stringr::str_remove(repo, stringr::regex('\\.git$')),
                 repo = stringr::str_split_i(repo, "/", 1)) -> repos
 
-pins::pin_write(board, repos, name = "gh_repos")
+pins::pin_write(board, repos, name = "repos")
