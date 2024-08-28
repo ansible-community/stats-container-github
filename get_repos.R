@@ -22,4 +22,9 @@ repos <- tibble::enframe(c(org_repos$url, collections$repo), name=NULL) |>
   ) |>
   dplyr::select(org, repo)
 
+# Cleanup weird repos
+repos |>
+  dplyr::mutate(repo = stringr::str_remove(repo, stringr::regex('\\.git$')),
+                repo = stringr::str_split_i(repo, "/", 1)) -> repos
+
 pins::pin_write(board, repos, name = "gh_repos")
