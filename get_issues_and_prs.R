@@ -66,3 +66,5 @@ pin_issues_prs_comments <- function(git_org, git_repo, get_all = TRUE) {
 
 # Run the function over the short-list
 purrr::walk2(index_list$org, index_list$repo, pin_issues_prs_comments)
+
+setwd("/")
