@@ -19,7 +19,8 @@ import sys
 import time
 
 import requests
-from requests.exceptions import HTTPError, ConnectionError
+from requests.exceptions import HTTPError, ConnectionError, ChunkedEncodingError
+from urllib3.exceptions import IncompleteRead, ProtocolError
 
 
 RATE_LIMIT = '''
@@ -349,6 +350,8 @@ def chunker(items, length=250):
         i += 1
 
 
+# Commented for calling from R
+#def main():
 def main(git_org,git_repo,get_all):
     # Commented for calling from R
     #parser = argparse.ArgumentParser()
@@ -360,7 +363,6 @@ def main(git_org,git_repo,get_all):
     # Commented for calling from R
     #output_dir = args.git_org + '%' + args.git_repo
     output_dir = git_org + '%' + git_repo
-    
     print('target: %s/%s' % (git_org, git_repo))
 
     if not os.path.exists(output_dir):
@@ -477,7 +479,8 @@ def main(git_org,git_repo,get_all):
                 })
             )
             resp = r.json()
-        except (HTTPError, ConnectionError, ValueError) as e:
+        except (HTTPError, ConnectionError, ValueError, IncompleteRead, ProtocolError, ChunkedEncodingError) as e:
+            print("Exception encountered in issues/prs")
             print(str(e))
             continue
 
@@ -580,7 +583,9 @@ def main(git_org,git_repo,get_all):
                         })
                     )
                     resp = r.json()
-                except (HTTPError, ConnectionError, ValueError) as e:
+                except (HTTPError, ConnectionError, ValueError, IncompleteRead, ProtocolError, ChunkedEncodingError) as e:
+                    print("Exception encountered in extra issues/prs")
+                    print(str(e))
                     continue
                 else:
                     if 'errors' in resp:
@@ -626,6 +631,7 @@ def main(git_org,git_repo,get_all):
     print(r.text)
 
 
+# Commented for calling from R
 #if __name__ == '__main__':
 #    with lock_file():
 #        main()
