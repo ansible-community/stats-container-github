@@ -5,5 +5,8 @@ default:
     - ansible
   repos:
     - ansible/ansible
+  blacklist:
+    # use the pin name
+    - 'ansible|ansible'
   collections:
     - awx.awx

@@ -27,6 +27,7 @@ safe_pin_meta <- purrr::possibly(~{pin_meta(.x, .y)$created |> as.character()},
                                  otherwise = NA)
 meta_repos |>
   mutate(pin_name = glue::glue("{org}|{repo}")) |>
+  filter(!(pin_name %in% org_repo_cfg$blacklist)) |>
   mutate(pin_time = purrr::map_chr(pin_name, ~safe_pin_meta(repo_board, .x))) |>
   arrange(pin_time) |>
   filter((pin_time < Sys.time() - 60*60*24*7) | is.na(pin_time)) |>
@@ -56,7 +57,9 @@ pin_issues_prs_comments <- function(git_org, git_repo, get_all = TRUE) {
     r <- parse_gh_json(gh_dir)
     if (nrow(r) > 0) {
       pins::pin_write(board = repo_board, x = r,
-                      name = glue::glue('{git_org}|{git_repo}'))
+                      name = glue::glue('{git_org}|{git_repo}'),
+                      force_identical_write = TRUE
+      )
     }
   }
 
