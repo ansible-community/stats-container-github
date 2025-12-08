@@ -82,18 +82,6 @@ COMMON = '''
                 name
             }
         }
-        projectCards(first: 100) {
-          nodes {
-            column {
-              name
-              project {
-                body
-                name
-                closed
-              }
-            }
-          }
-        }
         reactions(first: 100) {
           nodes {
             content
@@ -267,23 +255,6 @@ def make_reviewers(item):
         n['author']['login'] for n in nodes if n['author']
     ]
 
-
-def transform_project_cards(item):
-    nodes = item['projectCards']['nodes']
-
-    project_cards = set()
-    for n in nodes:
-        if n['column'] and n['column']['project']:
-            project_cards.add(
-                '%s: %s' % (
-                    n['column']['project']['name'],
-                    n['column']['name']
-                )
-            )
-
-    item['projectCards'] = list(project_cards)
-
-
 def make_committers(item):
     nodes = item['commits']['nodes']
 
@@ -303,7 +274,6 @@ def transform(items):
         transform_nodes_of_things(item, 'assignees', 'login')
         make_commenters(item)
         transform_nodes_of_things(item, 'reactions', 'content')
-        transform_project_cards(item)
         try:
             make_committers(item)
         except KeyError:
